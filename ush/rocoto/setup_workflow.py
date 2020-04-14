@@ -31,11 +31,10 @@ def main():
     parser = ArgumentParser(description='Setup XML workflow and CRONTAB for a GFS parallel.', formatter_class=ArgumentDefaultsHelpFormatter)
     parser.add_argument('--expdir', help='full path to experiment directory containing config files', type=str, required=False, default=os.environ['PWD'])
     args = parser.parse_args()
-
     configs = wfu.get_configs(args.expdir)
 
     _base = wfu.config_parser([wfu.find_config('config.base', configs)])
-
+    
     if not os.path.samefile(args.expdir, _base['EXPDIR']):
         print 'MISMATCH in experiment directories!'
         print 'config.base: EXPDIR = %s' % repr(_base['EXPDIR'])
@@ -192,7 +191,13 @@ def get_definitions(base):
     strings.append('\t<!ENTITY QUEUE_ARCH "%s">\n' % base['QUEUE_ARCH'])
     if scheduler in ['slurm']:
         strings.append('\t<!ENTITY PARTITION_ARCH "%s">\n' % base['QUEUE_ARCH'])
-    strings.append('\t<!ENTITY SCHEDULER  "%s">\n' % scheduler)
+    else:
+        strings.append('\t<!ENTITY QUEUE_ARCH "%s">\n' % base['QUEUE_ARCH'])
+    strings.append('\t<!ENTITY SCHEDULER  "%s">\n' % wfu.get_scheduler(base['machine']))
+    if 'COMPUTE_PARTITION' in base:
+        strings.append('\t<!ENTITY COMPUTE_PARTITION "%s">\n' % base.get('COMPUTE_PARTITION',None))
+    if 'SERVICE_PARTITION' in base:
+        strings.append('\t<!ENTITY SERVICE_PARTITION "%s">\n' % base.get('SERVICE_PARTITION',None))
     strings.append('\n')
     strings.append('\t<!-- Toggle HPSS archiving -->\n')
     strings.append('\t<!ENTITY ARCHIVE_TO_HPSS "YES">\n')
@@ -277,6 +282,11 @@ def get_gdasgfs_resources(dict_configs, cdump='gdas'):
         wtimestr, resstr, queuestr, memstr, natstr = wfu.get_resources(machine, cfg, task, reservation, cdump=cdump)
         taskstr = '%s_%s' % (task.upper(), cdump.upper())
 
+        if task in ['arch','post']:
+            partition = service_partition
+        else:
+            partition = compute_partition
+
         strings = []
         strings.append('\t<!ENTITY QUEUE_%s     "%s">\n' % (taskstr, queuestr))
         if scheduler in ['slurm'] and task in ['arch']:
@@ -302,7 +312,7 @@ def get_hyb_resources(dict_configs):
     scheduler = wfu.get_scheduler(machine)
     lobsdiag_forenkf = base.get('lobsdiag_forenkf', '.false.').upper()
     eupd_cyc= base.get('EUPD_CYC', 'gdas').upper()
-    reservation = base.get('RESERVATION', 'NONE').upper()
+    compute_partition = base.get('COMPUTE_PARTITION_LINE',None)
 
     dict_resources = OrderedDict()
 

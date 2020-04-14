@@ -1,4 +1,4 @@
-#!/bin/ksh -x
+#!/bin/bash
 
 ###############################################################
 # Source FV3GFS workflow modules
@@ -82,6 +82,7 @@ fi
 ###############################################################
 # Generate prepbufr files from dumps or copy from OPS
 if [ $DO_MAKEPREPBUFR = "YES" ]; then
+
     if [ $ROTDIR_DUMP = "YES" ]; then
 	rm $COMOUT/${OPREFIX}prepbufr
 	rm $COMOUT/${OPREFIX}prepbufr.acft_profiles

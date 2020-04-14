@@ -20,6 +20,10 @@ module load NCO/4.7.0
 module load CFP/2.0.1
 setenv USE_CFP YES
 module load pm5
+#setenv USE_CFP YES
+
+# modules used by vrfy
+module load pm5/1.0
 
 #module load HDF5-serial/1.10.1
 #module load NetCDF/4.5.0

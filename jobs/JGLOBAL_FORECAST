@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/bin/bash
 set -x
 
 export RUN_ENVIR=${RUN_ENVIR:-"nco"}
@@ -83,7 +83,11 @@ fi
 ##############################################
 
 # Restart conditions for GFS cycle come from GDAS
+
+export inistep=restart
 rCDUMP=$CDUMP
+export confignamevarfornems=$nems_temp
+
 [[ $CDUMP = "gfs" ]] && export rCDUMP="gdas"
 
 # Forecast length for GFS forecast

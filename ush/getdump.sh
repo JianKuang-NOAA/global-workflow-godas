@@ -2,6 +2,8 @@
 set -x
 
 CDATE=${1:-""}
+gpdy=$(echo $CDATE | cut -c9-10)
+gcyc=$(echo $CDATE | cut -c9-10)
 CDUMP=${2:-""}
 SOURCE_DIR=${3:-$DMPDIR/${CDUMP}${DUMP_SUFFIX}.${PDY}/${cyc}}
 TARGET_DIR=${4:-$ROTDIR/${CDUMP}.${PDY}/$cyc}
@@ -22,7 +24,6 @@ if [ ! -s $TARGET_DIR ]; then mkdir -p $TARGET_DIR ;fi
 # Set file prefix
 cyc=`echo $CDATE |cut -c 9-10`
 prefix="$CDUMP.t${cyc}z."
-
 
 # Link dump files from SOURCE_DIR to TARGET_DIR
 cd $SOURCE_DIR

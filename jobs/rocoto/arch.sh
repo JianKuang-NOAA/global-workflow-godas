@@ -1,4 +1,4 @@
-#!/bin/ksh -x
+#!/bin/bash
 
 ###############################################################
 ## Abstract:
@@ -166,6 +166,16 @@ if [ $status -ne 0  ]; then
 fi
 
 cd $ROTDIR
+
+if [ $cpl = ".true." ]; then
+# ocn and ice files
+    for targrp in ocn ocn2 ice SST; do
+        htar -P -cvf $ATARDIR/$CDATE/${targrp}.tar `cat $ARCH_LIST/${targrp}.txt`
+    done
+    for targrp in gfs_flux_1p00 gfs_pgrb2b; do
+        htar -P -cvf $ATARDIR/$CDATE/${targrp}.tar `cat $ARCH_LIST/${targrp}.txt`
+    done
+fi
 
 if [ $CDUMP = "gfs" ]; then
 
@@ -345,6 +355,14 @@ if [ $CDUMP = "gfs" ]; then
     gPDY=$(echo $GDATE | cut -c1-8)
     COMIN="$VFYARC/$CDUMP.$gPDY"
     [[ -d $COMIN ]] && rm -rf $COMIN
+fi
+
+if [ $cpl = ".true." ]; then
+# Remove ocean and ice files
+cd $ROTDIR/logs/$CDATE
+tail -n 3 gfs.ocnpost.p*.log |grep "code 0:0"
+status=$?
+[[ $status -ne 0 ]] && exit $status
 fi
 
 ###############################################################

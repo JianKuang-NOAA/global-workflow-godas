@@ -32,6 +32,11 @@ msg="HAS BEGUN"
 export LEVS=${LEVS:-127}
 export STARTHOUR=${STARTHOUR:-00}
 export ENDHOUR=${ENDHOUR:-180}
+export NEND1=120   ##first period length with time interval = NINT1
+##export NINT1=3     ##first period time interval
+export NINT1=1     ##first period time interval
+export NINT3=3     ##second period time interval
+export NZERO=6
 export INCREMENT=12
 export MAKEBUFR=NO
 export F00FLAG=YES

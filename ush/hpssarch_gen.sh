@@ -51,6 +51,27 @@ if [ $type = "gfs" ]; then
 
   head="gfs.t${cyc}z."
 
+# for coupled model
+if [ $cpl = ".true." ]; then
+  echo "cpl=",$cpl
+  rm -f gfs_flux_1p00.txt
+  rm -f ocn.txt
+  rm -f ocn2.txt
+  rm -f ice.txt
+  rm -f SST.txt
+  touch gfs_flux_1p00.txt
+  touch ocn.txt
+  touch ocn2.txt
+  touch ice.txt
+  touch SST.txt
+  echo  "${dirname}ice*nc             " >>ice.txt
+  echo  "${dirname}ocn*nc             " >>ocn.txt
+  echo  "${dirname}ocn_ice*grb2       " >>ocn2.txt
+  echo  "${dirname}SST*nc             " >>SST.txt
+  echo  "${dirname}${head}flux.1p00.f${fhr}           " >>gfs_flux_1p00.txt
+  echo  "${dirname}${head}flux.1p00.f${fhr}.idx       " >>gfs_flux_1p00.txt
+fi
+
   #..................
   echo  "${dirname}${head}pgrb2b.0p25.anl                  " >>gfs_pgrb2b.txt
   echo  "${dirname}${head}pgrb2b.0p25.anl.idx              " >>gfs_pgrb2b.txt
