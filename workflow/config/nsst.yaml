@@ -4,14 +4,6 @@
 
 config_nsst:
   filename: config.nsst
-  nst_spinup_logic: !FirstTrue
-    - when: !calc doc.nsst.get("NST_SPINUP","")
-      do: !expand "export NST_SPINUP=$NST_SPINUP"
-    - otherwise: |
-        export NST_SPINUP=0
-        #if [[ "$CDATE" = $SDATE ]]; then
-        #    export NST_SPINUP=1
-        #fi      
   content: !expand |
     #!/bin/ksh -x
     
@@ -25,6 +17,9 @@ config_nsst:
     echo "BEGIN: config.nsst"
     
     # NSST parameters contained within nstf_name
+
+    # NSST Spinup
+    export NST_SPINUP={doc.nsst.NST_SPINUP}
     
     # nstf_name(1) : NST_MODEL (NSST Model) : 0 = OFF, 1 = ON but uncoupled, 2 = ON and coupled
     export NST_MODEL={doc.nsst.NST_MODEL}

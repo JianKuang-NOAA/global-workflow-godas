@@ -162,7 +162,11 @@ FV3_GFS_predet(){
 	# nstf_name(4) : ZSEA1 (in mm) : 0
 	# nstf_name(5) : ZSEA2 (in mm) : 0
 	# nst_anl      : .true. or .false., NSST analysis over lake
-	NST_MODEL=${NST_MODEL:-0}
+        if [ $inistep = cold ] ; then
+              NST_MODEL=0
+        else
+	      NST_MODEL=${NST_MODEL:-0}
+        fi
 	NST_SPINUP=${NST_SPINUP:-0}
 	NST_RESV=${NST_RESV-0}
 	ZSEA1=${ZSEA1:-0}
