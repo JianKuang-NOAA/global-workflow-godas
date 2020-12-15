@@ -663,7 +663,7 @@ MOM6_out()
 	      export ocnfile=ocn_${year}_${month}_${day}_${hh}.nc
 
 	      echo "$NCP -p $ocnfile $COMOUT/ocn$p_date.$ENSMEM.$IDATE.nc"
-	      $NCP -p $ocnfile $COMOUT/ocn$p_date.$ENSMEM.$IDATE.nc
+	      [[ -f $ocnfile ]] && $NCP -p $ocnfile $COMOUT/ocn$p_date.$ENSMEM.$IDATE.nc
 	      status=$?
 	      [[ $status -ne 0 ]] && exit $status
              
